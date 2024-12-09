@@ -1,5 +1,4 @@
-<script setup>
-</script>
+<script setup></script>
 
 <template>
   <div class="wrapper">
@@ -7,24 +6,35 @@
       <img src="/logo.png" alt="Golden Eagle Logo" class="logo" />
       <div class="auth-links">
         <RouterLink class="login-link" to="/login">Login</RouterLink>
-        <RouterLink class="register-link" to="/register">Sign-Up</RouterLink>
+        <RouterLink class="login-link" to="/register/professor"
+          >Professor Sign-Up</RouterLink
+        >
+        <RouterLink class="login-link" to="/register/student"
+          >Student Sign-Up</RouterLink
+        >
       </div>
     </header>
     <div class="search-bar">
-      <input type="text" placeholder="Search professors, courses, and more..." />
+      <input
+        type="text"
+        placeholder="Search professors, courses, and more..."
+      />
       <button>Search</button>
     </div>
     <p class="welcome-text">
-      Welcome to Golden Eagle Search, home to all the information you need about CSULA's professors and courses.
+      Welcome to Golden Eagle Search, home to all the information you need about
+      CSULA's professors and courses.
     </p>
     <p class="welcome-text">
-      To start exploring, simply search a professor or course in the search bar above.
+      To start exploring, simply search a professor or course in the search bar
+      above.
     </p>
   </div>
 </template>
 
 <style>
-body, html {
+body,
+html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
