@@ -1,92 +1,76 @@
 <template>
-    <div class="wrapper">
-        <div class="header">
-            <h1>Golden Eagle Search</h1>
-        </div>
-        <div>
-            <form>
-                <input v-model="user.username" type="text" placeholder="username" />
-                <input v-model="user.password" type="text" placeholder="password" />
-                <p class="error">{{ error }}</p>
-                <button @click="login" type="button">Login</button>
-                <p class="register">Not Registered?</p>
-                <RouterLink class="register-link" to="/register">Sign Up</RouterLink>
-            </form>
-        </div>
-    </div>
+  <div class="login-page">
+    <h2>Login</h2>
+    <form @submit.prevent="loginUser">
+      <div>
+        <label>Username:</label>
+        <input type="text" v-model="form.username" required />
+      </div>
+      <div>
+        <label>Password:</label>
+        <input type="password" v-model="form.password" required />
+      </div>
+      <button type="submit">Login</button>
+      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+    </form>
+    <p>
+      Don't have an account?
+      <router-link to="/register/student">Register as a Student</router-link> or
+      <router-link to="/register/professor"
+        >Register as a Professor</router-link
+      >
+    </p>
+  </div>
 </template>
+
 <script>
-import axios from 'axios';
+import axios from "axios";
+
 export default {
-    data() {
-        return {
-            user: {
-                username: '',
-                password: '',
-            },
-            error: null
-        };
-    },
-    methods: {
-        async login() {
-            try {
-                const user = this.user;
-                const response = await axios.post('http://localhost:8080/users/login', user);
-                console.log(response.data);
-                const token = response.headers.authorization;
-                // console.log(token);
-                localStorage.setItem('authToken', token);
-                this.$router.push(`/profile/${response.data._id}`);
-            } catch(error) {
-                this.error = error.response.data.error;
-                console.log(error);
-            }
+  name: "Login",
+  data() {
+    return {
+      form: {
+        username: "",
+        password: "",
+      },
+      errorMessage: "",
+    };
+  },
+  methods: {
+    async loginUser() {
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/login",
+          this.form
+        );
+        const { token, role, id } = response.data;
+
+        localStorage.setItem("token", token);
+
+        // Redirect based on role
+        if (role === "Student") {
+          this.$router.push(`/profile/student/${id}`);
+        } else if (role === "Professor") {
+          this.$router.push(`/profile/professor/${id}`);
+        } else {
+          alert("Unknown role detected.");
         }
-    }
-}
+      } catch (error) {
+        this.errorMessage = error.response?.data?.error || "Login failed.";
+      }
+    },
+  },
+};
 </script>
+
 <style scoped>
-.header {
-    text-align: center;
-    color: #f8f8ff;
-    padding-bottom: 20px;
-}
-h1.header {
-    font-size: 18px;
-}
-form {
-    max-width: 300px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-}
-input {
-    font-family: 'Saira Extra Condensed', sans-serif;
-    color: #333;
-    margin-bottom: 15px;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-button {
-    width: 100%;
-    cursor: pointer;
-}
-.register {
-    display: flex;
-    justify-content: center;
-    color: #f8f8ff;
-}
-.register-link {
-    display: flex;
-    justify-content: center;
-    color: #b492ad;
-    text-decoration: underline;
+.login-page {
+  max-width: 400px;
+  margin: auto;
+  text-align: center;
 }
 .error {
-    display: flex;
-    justify-content: center;
-    color: #eb8b7a;
-    text-transform: uppercase;
+  color: red;
 }
 </style>
