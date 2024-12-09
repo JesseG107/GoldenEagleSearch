@@ -18,7 +18,7 @@
             </ul>
         </div>
         <div class="loop snippets">
-            <h3>Snippets</h3>
+            <h3>Courses</h3>
             <ul>
                 <li v-for="snippet in user.snippets">
                     <p> Created: {{ new Date(snippet.created).getFullYear() }} </p>
@@ -27,7 +27,7 @@
 
                 </li>
             </ul>
-            <button @click="addSnippet"> + Add Snippet</button>
+            <button @click="addSnippet"> + Add Course</button>
         </div>
     </div>
 </template>
