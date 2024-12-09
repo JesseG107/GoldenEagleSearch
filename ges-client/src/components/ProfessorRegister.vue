@@ -1,33 +1,46 @@
 <template>
-  <div class="register-page">
-    <h2>Professor Registration</h2>
-    <form @submit.prevent="registerProfessor">
-      <div>
-        <label>Name:</label>
-        <input type="text" v-model="form.name" required />
-      </div>
-      <div>
-        <label>Email:</label>
-        <input type="email" v-model="form.email" required />
-      </div>
-      <div>
-        <label>Password:</label>
-        <input type="password" v-model="form.password" required />
-      </div>
-      <div>
-        <label>Degree:</label>
-        <input type="text" v-model="form.degree" required />
-      </div>
-      <div>
-        <label>Department:</label>
-        <input type="text" v-model="form.department" required />
-      </div>
-      <button type="submit">Register</button>
-      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-    </form>
-    <p>
-      Already have an account? <router-link to="/login">Login here</router-link>
-    </p>
+  <div class="wrapper">
+    <div class="header">
+      <h1>Golden Eagle Search</h1>
+      <h2>Professor Registration</h2>
+    </div>
+    <div>
+      <form class="two-column-form" @submit.prevent="registerProfessor">
+        <div class="column">
+          <input v-model="form.name" type="text" placeholder="Name" required />
+          <input
+            v-model="form.email"
+            type="email"
+            placeholder="Email"
+            required
+          />
+          <input
+            v-model="form.password"
+            type="password"
+            placeholder="Password"
+            required
+          />
+        </div>
+        <div class="column">
+          <input
+            v-model="form.degree"
+            type="text"
+            placeholder="Degree"
+            required
+          />
+          <input
+            v-model="form.department"
+            type="text"
+            placeholder="Department"
+            required
+          />
+          <p class="error">{{ errorMessage }}</p>
+          <button type="submit">Register</button>
+          <p class="login">Already Registered?</p>
+          <RouterLink class="login-link" to="/login">Login</RouterLink>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -51,7 +64,7 @@ export default {
   methods: {
     async registerProfessor() {
       try {
-        const response = await axios.post(
+        await axios.post(
           "http://localhost:8080/professors/register",
           this.form
         );
@@ -67,11 +80,74 @@ export default {
 </script>
 
 <style scoped>
-.register-page {
-  max-width: 400px;
-  margin: auto;
+.header {
+  text-align: center;
+  color: #f8f8ff;
+  padding-bottom: 20px;
 }
+
+h1,
+h2 {
+  font-size: 24px;
+}
+
+.two-column-form {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.two-column-form .column {
+  flex: 1;
+  padding: 0 10px;
+}
+
+form {
+  margin: 0px auto;
+  width: 90%;
+}
+
+input {
+  font-family: "Saira Extra Condensed", sans-serif;
+  color: #333;
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+button {
+  width: 100%;
+  cursor: pointer;
+  background-color: #4caf50;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.login {
+  display: flex;
+  justify-content: center;
+  color: #f8f8ff;
+}
+
+.login-link {
+  display: flex;
+  justify-content: center;
+  color: #b492ad;
+  text-decoration: underline;
+}
+
 .error {
-  color: red;
+  display: flex;
+  justify-content: center;
+  color: #eb8b7a;
+  text-transform: uppercase;
 }
 </style>

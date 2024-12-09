@@ -1,39 +1,52 @@
 <template>
-  <div class="register-page">
-    <h2>Student Registration</h2>
-    <form @submit.prevent="registerStudent">
-      <div>
-        <label>Username:</label>
-        <input type="text" v-model="form.username" required />
-      </div>
-      <div>
-        <label>Email:</label>
-        <input type="email" v-model="form.email" required />
-      </div>
-      <div>
-        <label>Password:</label>
-        <input type="password" v-model="form.password" required />
-      </div>
-      <div>
-        <label>Major:</label>
-        <input type="text" v-model="form.major" required />
-      </div>
-      <div>
-        <label>Status:</label>
-        <select v-model="form.status" required>
-          <option value="freshman">Freshman</option>
-          <option value="sophomore">Sophomore</option>
-          <option value="junior">Junior</option>
-          <option value="senior">Senior</option>
-          <option value="graduate">Graduate</option>
-        </select>
-      </div>
-      <button type="submit">Register</button>
-      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-    </form>
-    <p>
-      Already have an account? <router-link to="/login">Login here</router-link>
-    </p>
+  <div class="wrapper">
+    <div class="header">
+      <h1>Golden Eagle Search</h1>
+      <h2>Student Registration</h2>
+    </div>
+    <div>
+      <form class="two-column-form" @submit.prevent="registerStudent">
+        <div class="column">
+          <input
+            v-model="form.username"
+            type="text"
+            placeholder="Username"
+            required
+          />
+          <input
+            v-model="form.email"
+            type="email"
+            placeholder="Email"
+            required
+          />
+          <input
+            v-model="form.password"
+            type="password"
+            placeholder="Password"
+            required
+          />
+        </div>
+        <div class="column">
+          <input
+            v-model="form.major"
+            type="text"
+            placeholder="Major"
+            required
+          />
+          <select v-model="form.status" required>
+            <option disabled value="">Select Status</option>
+            <option value="freshman">Freshman</option>
+            <option value="sophomore">Sophomore</option>
+            <option value="junior">Junior</option>
+            <option value="senior">Senior</option>
+          </select>
+          <p class="error">{{ errorMessage }}</p>
+          <button type="submit">Register</button>
+          <p class="login">Already Registered?</p>
+          <RouterLink class="login-link" to="/login">Login</RouterLink>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -49,7 +62,7 @@ export default {
         email: "",
         password: "",
         major: "",
-        status: "freshman",
+        status: "",
       },
       errorMessage: "",
     };
@@ -57,10 +70,7 @@ export default {
   methods: {
     async registerStudent() {
       try {
-        const response = await axios.post(
-          "http://localhost:8080/students/register",
-          this.form
-        );
+        await axios.post("http://localhost:8080/students/register", this.form);
         alert("Student registration successful!");
         this.$router.push("/login");
       } catch (error) {
@@ -73,11 +83,75 @@ export default {
 </script>
 
 <style scoped>
-.register-page {
-  max-width: 400px;
-  margin: auto;
+.header {
+  text-align: center;
+  color: #f8f8ff;
+  padding-bottom: 20px;
 }
+
+h1,
+h2 {
+  font-size: 24px;
+}
+
+.two-column-form {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.two-column-form .column {
+  flex: 1;
+  padding: 0 10px;
+}
+
+form {
+  margin: 0px auto;
+  width: 90%;
+}
+
+input,
+select {
+  font-family: "Saira Extra Condensed", sans-serif;
+  color: #333;
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+button {
+  width: 100%;
+  cursor: pointer;
+  background-color: #4caf50;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.login {
+  display: flex;
+  justify-content: center;
+  color: #f8f8ff;
+}
+
+.login-link {
+  display: flex;
+  justify-content: center;
+  color: #b492ad;
+  text-decoration: underline;
+}
+
 .error {
-  color: red;
+  display: flex;
+  justify-content: center;
+  color: #eb8b7a;
+  text-transform: uppercase;
 }
 </style>
