@@ -48,20 +48,23 @@ const registerProfessor = async (req, res) => {
 const loginProfessor = async (req, res) => {
   const { email, password } = req.body;
 
+  if (!email || !password) {
+    return res.status(400).json({ error: "Email and Password are required." });
+  }
+
   try {
-    const professor = await Professor.findOne({ email });
+    const professor = await Professor.findOne({ email: email.toLowerCase() });
     if (!professor) {
       return res.status(401).json({ error: "Invalid credentials." });
     }
 
-    const isMatch = await bcrypt.compare(password, professor.password);
-    if (!isMatch) {
+    const isPasswordValid = await bcrypt.compare(password, professor.password);
+    if (!isPasswordValid) {
       return res.status(401).json({ error: "Invalid credentials." });
     }
 
-    // Generate JWT Token with role
     const token = jwt.sign(
-      { id: professor._id, email: professor.email, role: "Professor" },
+      { id: professor._id, email: professor.email, role: "professor" },
       config.jwtsecret,
       { expiresIn: "24h" }
     );

@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const controller = require("./answer.controller");
-const { verifyToken } = require("../../middleware/authorization");
+const { verifyToken } = require("../middleware/authorization");
 
 router.post("/", verifyToken, controller.createAnswer);
 router.get("/:question_id", controller.getAnswersByQuestion);

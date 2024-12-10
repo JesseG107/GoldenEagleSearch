@@ -64,29 +64,27 @@ const registerStudent = async (req, res) => {
   if (!username || !email || !password || !major || !status) {
     return res.status(400).json({
       error:
-        "All fields (username, email, password, major, status) are required",
+        "All fields (username, email, password, major, status) are required.",
     });
   }
 
   try {
-    // Check for duplicate email or username
+    // Check if the email already exists
     const existingStudent = await Student.findOne({
-      $or: [{ email }, { username }],
+      email: email.toLowerCase(),
     });
     if (existingStudent) {
-      return res
-        .status(400)
-        .json({ error: "Username or Email already exists" });
+      return res.status(400).json({ error: "Email already exists." });
     }
 
-    // Hash password
+    // Hash the password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create student
+    // Create the student with the hashed password
     const student = new Student({
       username,
-      email,
+      email: email.toLowerCase(),
       password: hashedPassword,
       major,
       status: status.toLowerCase(),
@@ -94,7 +92,8 @@ const registerStudent = async (req, res) => {
 
     const savedStudent = await student.save();
     const response = savedStudent.toObject();
-    delete response.password; // Do not expose the password
+    delete response.password; // Exclude password from the response
+
     res.status(201).json(response);
   } catch (error) {
     res.status(500).json({ error: `Internal server error: ${error.message}` });
@@ -103,27 +102,27 @@ const registerStudent = async (req, res) => {
 
 // Login a student
 const loginStudent = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
-  if (!username || !password) {
-    return res
-      .status(400)
-      .json({ error: "Username and Password are required." });
+  if (!email || !password) {
+    return res.status(400).json({ error: "Email and password are required." });
   }
 
   try {
-    const student = await Student.findOne({ username: username.toLowerCase() });
+    const student = await Student.findOne({ email: email.toLowerCase() });
     if (!student) {
-      return res.status(401).json({ error: "Invalid credentials." });
+      return res.status(401).json({ error: "Invalid email or password." });
     }
 
+    // Compare the provided password with the hashed password in the database
     const isPasswordValid = await bcrypt.compare(password, student.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ error: "Invalid credentials." });
+      return res.status(401).json({ error: "Invalid email or password." });
     }
 
+    // Generate JWT token
     const token = jwt.sign(
-      { id: student._id, username: student.username, role: "student" },
+      { id: student._id, email: student.email, role: "student" },
       config.jwtsecret,
       { expiresIn: "24h" }
     );

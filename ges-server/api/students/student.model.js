@@ -14,6 +14,10 @@ const StudentSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
     },
+    password: {
+      type: String, // Add this field
+      required: true,
+    },
     major: {
       type: String,
       required: true,
@@ -24,6 +28,12 @@ const StudentSchema = new mongoose.Schema(
       lowercase: true,
       required: true,
     },
+    reviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Review", // Reference to the Review model
+      },
+    ],
   },
   {
     toObject: { virtuals: true },

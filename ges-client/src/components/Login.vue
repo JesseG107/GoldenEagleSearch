@@ -1,78 +1,80 @@
 <template>
-  <div class="wrapper">
-    <div class="header">
-      <h1>Golden Eagle Search</h1>
-      <h2>Login</h2>
-    </div>
-    <div class="form-container">
-      <form @submit.prevent="loginUser">
-        <div class="form-group">
-          <input
-            v-model="form.username"
-            type="text"
-            placeholder="Username"
-            required
-          />
-        </div>
-        <div class="form-group">
-          <input
-            v-model="form.password"
-            type="password"
-            placeholder="Password"
-            required
-          />
-        </div>
-        <button type="submit">Login</button>
-        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-      </form>
-      <div class="register-links">
-        <p>Don't have an account?</p>
-        <router-link to="/register/student" class="register-link">
-          Register as a Student
-        </router-link>
-        <router-link to="/register/professor" class="register-link">
-          Register as a Professor
-        </router-link>
+  <div class="login">
+    <h2>Login</h2>
+    <form @submit.prevent="login">
+      <div>
+        <label for="email">Email</label>
+        <input
+          type="email"
+          v-model="email"
+          id="email"
+          placeholder="Enter your email"
+          required
+        />
       </div>
-    </div>
+      <div>
+        <label for="password">Password</label>
+        <input
+          type="password"
+          v-model="password"
+          id="password"
+          placeholder="Enter your password"
+          required
+        />
+      </div>
+      <div>
+        <label for="role">Login as</label>
+        <select v-model="role" id="role" required>
+          <option value="student">Student</option>
+          <option value="professor">Professor</option>
+        </select>
+      </div>
+      <button type="submit">Login</button>
+    </form>
+    <p v-if="error" class="error">{{ error }}</p>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
-  name: "Login",
   data() {
     return {
-      form: {
-        username: "",
-        password: "",
-      },
-      errorMessage: "",
+      email: "",
+      password: "",
+      role: "student", // Default role is student
+      error: null,
     };
   },
   methods: {
-    async loginUser() {
+    async login() {
       try {
-        const response = await axios.post(
-          "http://localhost:8080/login",
-          this.form
-        );
-        const { token, role, id } = response.data;
+        // Determine the login endpoint based on the role
+        const endpoint =
+          this.role === "student"
+            ? "http://localhost:8080/students/login"
+            : "http://localhost:8080/professors/login";
 
-        localStorage.setItem("token", token);
+        // Make the login request
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: this.email, password: this.password }),
+        });
 
-        // Redirect based on role
-        if (role === "Student") {
-          this.$router.push(`/profile/student/${id}`);
-        } else if (role === "Professor") {
-          this.$router.push(`/profile/professor/${id}`);
-        } else {
-          alert("Unknown role detected.");
+        const result = await response.json();
+
+        if (!response.ok) {
+          this.error = result.error;
+          return;
         }
-      } catch (error) {
-        this.errorMessage = error.response?.data?.error || "Login failed.";
+
+        // Store the token and redirect
+        localStorage.setItem("token", result.token);
+        this.$router.push("/dashboard"); // Adjust route as per your application
+      } catch (err) {
+        this.error = "An error occurred. Please try again.";
       }
     },
   },
@@ -80,104 +82,56 @@ export default {
 </script>
 
 <style scoped>
-/* Wrapper and Header Styling */
-.wrapper {
+.login {
   max-width: 400px;
   margin: 0 auto;
-  padding: 30px 20px;
-  background-color: #1e1e2e;
-  color: #f8f8ff;
+  padding: 20px;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  background-color: #f9f9f9;
+}
+
+h2 {
   text-align: center;
-}
-
-.header h1 {
-  font-size: 28px;
-  margin-bottom: 5px;
-}
-
-.header h2 {
-  font-size: 20px;
   margin-bottom: 20px;
-}
-
-/* Form Container */
-.form-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 }
 
 form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
+label {
+  margin-bottom: 8px;
+  font-weight: bold;
 }
 
-input {
-  font-family: "Saira Extra Condensed", sans-serif;
-  color: #333;
-  padding: 10px;
-  border-radius: 5px;
+input,
+select {
+  margin-bottom: 15px;
+  padding: 8px;
+  font-size: 16px;
   border: 1px solid #ccc;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-input:focus {
-  border-color: #6a5acd;
-  outline: none;
+  border-radius: 4px;
 }
 
 button {
-  width: 100%;
-  cursor: pointer;
-  background-color: #4caf50;
-  color: #fff;
   padding: 10px;
-  border: none;
-  border-radius: 5px;
   font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #0056b3;
 }
 
-/* Register Links */
-.register-links {
-  margin-top: 10px;
-}
-
-.register-links p {
-  margin: 10px 0;
-  color: #f8f8ff;
-}
-
-.register-link {
-  display: block;
-  color: #b492ad;
-  text-decoration: none;
-  font-size: 14px;
-  margin-bottom: 5px;
-}
-
-.register-link:hover {
-  text-decoration: underline;
-  color: #d9a7e2;
-}
-
-/* Error Styling */
 .error {
-  color: #eb8b7a;
-  font-size: 14px;
-  text-transform: uppercase;
-  margin-top: 5px;
+  color: red;
+  margin-top: 10px;
+  text-align: center;
 }
 </style>

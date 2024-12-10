@@ -5,7 +5,12 @@
     <header>
       <img src="/logo.png" alt="Golden Eagle Logo" class="logo" />
       <div class="auth-links">
-        <RouterLink class="login-link" to="/login">Login</RouterLink>
+        <RouterLink class="login-link" to="/students/login"
+          >Student Login</RouterLink
+        >
+        <RouterLink class="login-link" to="/professors/login"
+          >Professor Login</RouterLink
+        >
         <RouterLink class="login-link" to="/register/professor"
           >Professor Sign-Up</RouterLink
         >

@@ -6,12 +6,23 @@ const { username, password, projectname } = require("../config.json");
 const mongoURL = `mongodb+srv://${username}:${password}@cluster0.j5wvs.mongodb.net/${projectname}?retryWrites=true&w=majority`;
 
 // CONNECT TO MONGO
+// const connectDB = async () => {
+//   try {
+//     await mongoose.connect('mongodb+srv://admin:coffee100!@cluster0.33f1v.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
+//     console.log(`Connected to Mongo DB`);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+// CONNECT TO DIFF MONGO
 const connectDB = async () => {
   try {
-    await mongoose.connect('mongodb+srv://admin:coffee100!@cluster0.33f1v.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
-    console.log(`Connected to Mongo DB`);
+    await mongoose.connect(mongoURL);
+    console.log("Succesfuly connection to Mongo DB");
   } catch (error) {
     console.log(error);
+    process.exit(1);
   }
 };
 
@@ -24,11 +35,16 @@ const testConnection = async () => {
     const mongoose = require("mongoose");
 
     // Get a list of collections in the database
-    const collections = await mongoose.connection.db.listCollections().toArray();
+    const collections = await mongoose.connection.db
+      .listCollections()
+      .toArray();
     console.log("Collections in the database:", collections);
 
     // Optional: Create a test collection and document
-    const TestModel = mongoose.model("Test", new mongoose.Schema({ name: String }));
+    const TestModel = mongoose.model(
+      "Test",
+      new mongoose.Schema({ name: String })
+    );
     const testDocument = await TestModel.create({ name: "Test Document" });
     console.log("Test document created:", testDocument);
 

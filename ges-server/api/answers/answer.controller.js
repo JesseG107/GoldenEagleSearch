@@ -1,5 +1,5 @@
 const Answer = require("./answer.model");
-const Question = require("./question.model");
+const Question = require("../questions/question.model");
 
 // Create a new answer
 const createAnswer = async (req, res) => {

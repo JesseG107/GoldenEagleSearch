@@ -19,6 +19,8 @@ import StudentRegister from "../components/StudentRegister.vue";
 import ProfessorRegister from "../components/ProfessorRegister.vue";
 import StudentProfile from "../components/StudentProfile.vue";
 import ProfessorProfile from "../components/ProfessorProfile.vue";
+import StudentLogin from "../components/StudentLogin.vue";
+import ProfessorLogin from "../components/ProfessorLogin.vue";
 
 const routes = [
   { path: "/", component: Home },
@@ -34,6 +36,8 @@ const routes = [
   { path: "/register/professor", component: ProfessorRegister },
   { path: "/profile/student/:id", component: StudentProfile },
   { path: "/profile/professor/:id", component: ProfessorProfile },
+  { path: "/students/login", component: StudentLogin },
+  { path: "/professors/login", component: ProfessorLogin },
 ];
 
 const router = createRouter({
