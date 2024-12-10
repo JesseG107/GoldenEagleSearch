@@ -3,6 +3,8 @@
     <div class="header">
       <h1>Golden Eagle Search</h1>
       <h2>Student Registration</h2>
+      <RouterLink class="login-link" to="/home">Home</RouterLink>
+
     </div>
     <div>
       <form class="two-column-form" @submit.prevent="registerStudent">
@@ -43,7 +45,7 @@
           <p class="error">{{ errorMessage }}</p>
           <button type="submit">Register</button>
           <p class="login">Already Registered?</p>
-          <RouterLink class="login-link" to="/login">Login</RouterLink>
+          <RouterLink class="login-link" to="/students/login">Login</RouterLink>
         </div>
       </form>
     </div>
@@ -139,13 +141,18 @@ button:hover {
   display: flex;
   justify-content: center;
   color: #f8f8ff;
+  font-size: 1.1rem;
 }
 
 .login-link {
   display: flex;
   justify-content: center;
-  color: #b492ad;
+  color: #FFD700;
   text-decoration: underline;
+}
+.login-link:hover {
+  color: #FFF68F;
+  text-decoration-color: #FFF68F;
 }
 
 .error {

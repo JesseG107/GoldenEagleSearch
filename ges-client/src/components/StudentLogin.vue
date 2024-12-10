@@ -2,7 +2,10 @@
   <div class="wrapper">
     <!-- Header -->
     <div class="header">
+      <h1>Golden Eagle Search</h1>
       <h1>Student Login</h1>
+      <RouterLink class="login-link" to="/home">Home</RouterLink>
+
     </div>
 
     <!-- Login -->
@@ -17,7 +20,7 @@
         <p class="error">{{ error }}</p>
         <button @click="login" type="button">Login</button>
         <p class="register">Not Registered?</p>
-        <RouterLink class="register-link" to="/students/register">
+        <RouterLink class="register-link" to="/register/student">
           Register Now
         </RouterLink>
       </form>
@@ -55,10 +58,12 @@ export default {
 
         // Redirect to the student profile
         this.$router.push(`/profile/student/${response.data._id}`);
+        localStorage.setItem("studentId", response.data._id);
       } catch (error) {
         this.error = error.response.data.error;
         console.log(error);
       }
+      
     },
   },
 };
@@ -89,6 +94,8 @@ input {
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
+  width: 300px;
+  font-size: 1.1rem;
 }
 
 button {
@@ -100,15 +107,19 @@ button {
   display: flex;
   justify-content: center;
   color: #f8f8ff;
+  font-size: 1.2rem;
 }
 
 .register-link {
   display: flex;
   justify-content: center;
-  color: #b492ad;
+  color: #FFD700;
   text-decoration: underline;
 }
-
+.register-link:hover {
+  color: #FFF68F;
+  text-decoration-color: #FFF68F;
+}
 .error {
   display: flex;
   justify-content: center;

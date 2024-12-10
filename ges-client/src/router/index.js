@@ -16,6 +16,8 @@ import StudentProfile from "../components/StudentProfile.vue";
 import ProfessorProfile from "../components/ProfessorProfile.vue";
 import StudentLogin from "../components/StudentLogin.vue";
 import ProfessorLogin from "../components/ProfessorLogin.vue";
+import AfterLoginHomeProfessor from "../components/AfterLoginHomeProfessor.vue";
+import AfterLoginHomeStudent from "../components/AfterLoginHomeStudent.vue";
 
 //Review Pages
 import ReviewForm from "../components/ReviewForm.vue";
@@ -32,6 +34,8 @@ const routes = [
   { path: "/profile/professor/:id", component: ProfessorProfile },
   { path: "/students/login", component: StudentLogin },
   { path: "/professors/login", component: ProfessorLogin },
+  { path: "/afterloginhomestudent", component: AfterLoginHomeStudent },
+  { path: "/afterloginhomeprofessor", component: AfterLoginHomeProfessor },
   { path: "/reviews/add", component: ReviewForm }, // Add a review
   { path: "/reviews", component: ReviewList },
 ];

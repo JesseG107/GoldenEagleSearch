@@ -1,22 +1,16 @@
 <script setup></script>
+
 <template>
   <div class="wrapper">
     <header>
       <img src="/logo.png" alt="Golden Eagle Logo" class="logo" />
       <div class="auth-links">
-        <RouterLink class="login-link" to="/students/login"
-          >Student Login</RouterLink
+        <RouterLink
+        class="login-link"
+        :to="`/profile/professor/${professorId}`"
+      >
+    View Your Professor Profile</RouterLink
         >
-        <RouterLink class="login-link" to="/register/student"
-          >Student Sign-Up</RouterLink
-        >
-        <RouterLink class="login-link" to="/professors/login"
-          >Professor Login</RouterLink
-        >
-        <RouterLink class="login-link" to="/register/professor"
-          >Professor Sign-Up</RouterLink
-        >
-
       </div>
     </header>
     <div class="search-bar">
@@ -91,7 +85,6 @@ html {
   color: #FFF68F;
   text-decoration-color: #FFF68F;
 }
-
 .search-bar {
   display: flex;
   justify-content: center;
@@ -121,7 +114,7 @@ html {
 }
 
 .search-bar button:hover {
-background-color: #FFD700;
+  background-color: #FFD700;
 }
 
 .welcome-text {
