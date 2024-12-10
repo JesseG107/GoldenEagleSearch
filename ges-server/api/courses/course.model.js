@@ -31,6 +31,10 @@ const CourseSchema = new mongoose.Schema(
         ref: "Professor",
       },
     ],
+    syllabus: {
+      type: String, // Store the third-party PDF URL
+      required: false,
+    },
   },
   {
     toObject: { virtuals: true },

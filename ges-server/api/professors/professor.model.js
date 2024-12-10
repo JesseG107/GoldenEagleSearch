@@ -30,6 +30,28 @@ const ProfessorSchema = new mongoose.Schema(
         ref: "Course",
       },
     ],
+    ratings: {
+      type: Number, // Single numeric rating (e.g., average rating)
+      default: 0,
+    },
+    reviews: [
+      {
+        studentName: {
+          type: String,
+          required: true,
+        },
+        personalRating: {
+          type: String, // Individual rating given by the student
+          required: true,
+          min: 1, // Minimum rating value
+          max: 5, // Maximum rating value
+        },
+        comment: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
   {
     toObject: { virtuals: true },
