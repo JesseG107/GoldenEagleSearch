@@ -9,17 +9,27 @@ import About from "../components/About.vue";
 // From Older Merged
 import Search from "../components/Search.vue";
 
-// Testing pages
+// Student and Professors Registrations
 import StudentRegister from "../components/StudentRegister.vue";
 import ProfessorRegister from "../components/ProfessorRegister.vue";
+
+// Student and Professer Profiles
 import StudentProfile from "../components/StudentProfile.vue";
 import ProfessorProfile from "../components/ProfessorProfile.vue";
+
+// Student and Professor Logins
 import StudentLogin from "../components/StudentLogin.vue";
 import ProfessorLogin from "../components/ProfessorLogin.vue";
 
 //Review Pages
 import ReviewForm from "../components/ReviewForm.vue";
 import ReviewList from "../components/ReviewList.vue";
+
+//Course Page
+import Courses from "../components/Courses.vue";
+
+// Professors Page
+import Professors from "../components/Professors.vue";
 
 const routes = [
   { path: "/", component: Home },
@@ -34,6 +44,8 @@ const routes = [
   { path: "/professors/login", component: ProfessorLogin },
   { path: "/reviews/add", component: ReviewForm }, // Add a review
   { path: "/reviews", component: ReviewList },
+  { path: "/courses", component: Courses },
+  { path: "/professors", component: Professors },
 ];
 
 const router = createRouter({
