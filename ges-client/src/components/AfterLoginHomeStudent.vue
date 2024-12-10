@@ -1,23 +1,23 @@
-<script setup></script>
+<script setup>
+import { ref } from "vue";
+
+// Retrieve the MongoDB ObjectId for the student from localStorage
+const studentId = ref(localStorage.getItem("studentId"));
+</script>
+
+
 <template>
   <div class="wrapper">
     <header>
       <img src="/logo.png" alt="Golden Eagle Logo" class="logo" />
       <div class="auth-links">
-        <RouterLink class="login-link" to="/students/login"
-          >Student Login</RouterLink
-        >
-        <RouterLink class="login-link" to="/register/student"
-          >Student Sign-Up</RouterLink
-        >
-        <RouterLink class="login-link" to="/professors/login"
-          >Professor Login</RouterLink
-        >
-        <RouterLink class="login-link" to="/register/professor"
-          >Professor Sign-Up</RouterLink
-        >
-
-      </div>
+      <RouterLink
+        class="login-link"
+        :to="`/profile/student/${studentId}`"
+      >
+        View Your Student Profile
+      </RouterLink>
+    </div>
     </header>
     <div class="search-bar">
       <input
@@ -121,10 +121,12 @@ html {
 }
 
 .search-bar button:hover {
-background-color: #FFD700;
+  background-color: #FFD700;
 }
 
 .welcome-text {
   font-size: 1.5em;
 }
+
+
 </style>

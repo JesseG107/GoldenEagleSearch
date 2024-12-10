@@ -3,6 +3,7 @@
     <div class="header">
       <h1>Golden Eagle Search</h1>
       <h2>Professor Registration</h2>
+      <RouterLink class="login-link" to="/home">Home</RouterLink>
     </div>
     <div>
       <form class="two-column-form" @submit.prevent="registerProfessor">
@@ -37,7 +38,7 @@
           <p class="error">{{ errorMessage }}</p>
           <button type="submit">Register</button>
           <p class="login">Already Registered?</p>
-          <RouterLink class="login-link" to="/login">Login</RouterLink>
+          <RouterLink class="login-link" to="/professors/login">Login</RouterLink>
         </div>
       </form>
     </div>
@@ -69,7 +70,7 @@ export default {
           this.form
         );
         alert("Professor registration successful!");
-        this.$router.push("/login");
+        this.$router.push("/professors/login");
       } catch (error) {
         this.errorMessage =
           error.response?.data?.error || "Registration failed.";
@@ -115,6 +116,7 @@ input {
   border-radius: 5px;
   border: 1px solid #ccc;
   width: 100%;
+  font-size: 1.1rem;
 }
 
 button {
@@ -130,18 +132,22 @@ button {
 button:hover {
   background-color: #45a049;
 }
-
 .login {
   display: flex;
   justify-content: center;
   color: #f8f8ff;
+  font-size: 1.1rem;
 }
 
 .login-link {
   display: flex;
   justify-content: center;
-  color: #b492ad;
+  color: #FFD700;
   text-decoration: underline;
+}
+.login-link:hover {
+  color: #FFF68F;
+  text-decoration-color: #FFF68F;
 }
 
 .error {
