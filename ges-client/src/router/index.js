@@ -7,11 +7,6 @@ import Home from "../components/Home.vue";
 import About from "../components/About.vue";
 
 // From Older Merged
-//import Register from "../components/Register.vue";
-//import Login from "../components/Login.vue";
-//import Profile from "../components/Profile.vue";
-//import Course from "../components/Course.vue";
-//import Professor from "../components/ProfessorView.vue";
 import Search from "../components/Search.vue";
 
 // Testing pages
@@ -24,15 +19,14 @@ import ProfessorLogin from "../components/ProfessorLogin.vue";
 import AfterLoginHomeProfessor from "../components/AfterLoginHomeProfessor.vue";
 import AfterLoginHomeStudent from "../components/AfterLoginHomeStudent.vue";
 
+//Review Pages
+import ReviewForm from "../components/ReviewForm.vue";
+import ReviewList from "../components/ReviewList.vue";
+
 const routes = [
   { path: "/", component: Home },
   { path: "/about", component: About },
-  //{ path: "/register", component: Register },
-  //{ path: "/login", component: Login },
-  //{ path: "/profile/:id", component: Profile },
   { path: "/home", component: Home },
-  //{ path: "/course", component: Course },
-  //{ path: "/professor", component: Professor },
   { path: "/search", component: Search },
   { path: "/register/student", component: StudentRegister },
   { path: "/register/professor", component: ProfessorRegister },
@@ -42,6 +36,8 @@ const routes = [
   { path: "/professors/login", component: ProfessorLogin },
   { path: "/afterloginhomestudent", component: AfterLoginHomeStudent },
   { path: "/afterloginhomeprofessor", component: AfterLoginHomeProfessor },
+  { path: "/reviews/add", component: ReviewForm }, // Add a review
+  { path: "/reviews", component: ReviewList },
 ];
 
 const router = createRouter({
