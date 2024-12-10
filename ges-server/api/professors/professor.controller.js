@@ -58,8 +58,8 @@ const loginProfessor = async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials." });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, professor.password);
-    if (!isPasswordValid) {
+    const authenticated = await bcrypt.compare(password, professor.password);
+    if (!authenticated) {
       return res.status(401).json({ error: "Invalid credentials." });
     }
 
@@ -69,9 +69,12 @@ const loginProfessor = async (req, res) => {
       { expiresIn: "24h" }
     );
 
-    res
-      .header("Authorization", `Bearer ${token}`)
-      .json({ message: "Login successful", token });
+    // Convert Mongoose document to plain object and remove sensitive data
+    const authorized = professor.toObject();
+    delete authorized.password;
+
+    // Send the token in the Authorization header and the professor data in the response
+    res.header("Authorization", `Bearer ${token}`).json(authorized);
   } catch (error) {
     res.status(500).json({ error: `Internal server error: ${error.message}` });
   }

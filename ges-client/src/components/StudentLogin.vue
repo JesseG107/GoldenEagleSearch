@@ -1,39 +1,40 @@
 <template>
-  <div class="login">
-    <h2>Student Login</h2>
-    <form @submit.prevent="login">
-      <div>
-        <label for="email">Email</label>
+  <div class="wrapper">
+    <!-- Header -->
+    <div class="header">
+      <h1>Student Login</h1>
+    </div>
+
+    <!-- Login -->
+    <div>
+      <form>
+        <input v-model="student.email" type="email" placeholder="Email" />
         <input
-          type="email"
-          v-model="email"
-          id="email"
-          placeholder="Enter your email"
-          required
-        />
-      </div>
-      <div>
-        <label for="password">Password</label>
-        <input
+          v-model="student.password"
           type="password"
-          v-model="password"
-          id="password"
-          placeholder="Enter your password"
-          required
+          placeholder="Password"
         />
-      </div>
-      <button type="submit">Login</button>
-    </form>
-    <p v-if="error" class="error">{{ error }}</p>
+        <p class="error">{{ error }}</p>
+        <button @click="login" type="button">Login</button>
+        <p class="register">Not Registered?</p>
+        <RouterLink class="register-link" to="/students/register">
+          Register Now
+        </RouterLink>
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
-      email: "",
-      password: "",
+      student: {
+        email: "",
+        password: "",
+      },
       error: null,
     };
   },
@@ -42,33 +43,21 @@ export default {
       try {
         const student = this.student;
 
-        // const response = await fetch("http://localhost:8080/students/login", {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify({ email: this.email, password: this.password }),
-        // });
-
         const response = await axios.post(
-          "http://localhost:8080/profile/student",
+          "http://localhost:8080/students/login",
           student
         );
 
-        const result = await response.json();
-
-        if (!response.ok) {
-          this.error = result.error;
-          return;
-        }
-
+        // Set the authorization token in local storage
         const token = response.headers.authorization;
 
-        // Store the token and redirect
-        localStorage.setItem("token", result.token);
-        this.$router.push("/profile/student"); // Redirect to student profile
-      } catch (err) {
-        this.error = "An error occurred. Please try again.";
+        localStorage.setItem("authToken", token);
+
+        // Redirect to the student profile
+        this.$router.push(`/profile/student/${response.data._id}`);
+      } catch (error) {
+        this.error = error.response.data.error;
+        console.log(error);
       }
     },
   },
@@ -76,55 +65,54 @@ export default {
 </script>
 
 <style scoped>
-.login {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #f9f9f9;
+.header {
+  text-align: center;
+  color: #f8f8ff;
+  padding-bottom: 20px;
 }
 
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
+h1.header {
+  font-size: 18px;
 }
 
 form {
+  max-width: 300px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
 }
 
-label {
-  margin-bottom: 8px;
-  font-weight: bold;
-}
-
 input {
+  font-family: "Saira Extra Condensed", sans-serif;
+  color: #333;
   margin-bottom: 15px;
-  padding: 8px;
-  font-size: 16px;
+  padding: 10px;
+  border-radius: 5px;
   border: 1px solid #ccc;
-  border-radius: 4px;
 }
 
 button {
-  padding: 10px;
-  font-size: 16px;
-  color: #fff;
-  background-color: #007bff;
-  border: none;
-  border-radius: 4px;
+  width: 100%;
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #0056b3;
+.register {
+  display: flex;
+  justify-content: center;
+  color: #f8f8ff;
+}
+
+.register-link {
+  display: flex;
+  justify-content: center;
+  color: #b492ad;
+  text-decoration: underline;
 }
 
 .error {
-  color: red;
-  margin-top: 10px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  color: #eb8b7a;
+  text-transform: uppercase;
 }
 </style>

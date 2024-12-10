@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
 const Student = require("./student.model");
 const config = require("../../config.json");
 
@@ -104,32 +105,38 @@ const registerStudent = async (req, res) => {
 const loginStudent = async (req, res) => {
   const { email, password } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).json({ error: "Email and password are required." });
-  }
-
   try {
-    const student = await Student.findOne({ email: email.toLowerCase() });
+    const student = await Student.findOne({
+      email: email.toLowerCase(),
+    });
+
     if (!student) {
-      return res.status(401).json({ error: "Invalid email or password." });
+      return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    // Compare the provided password with the hashed password in the database
-    const isPasswordValid = await bcrypt.compare(password, student.password);
-    if (!isPasswordValid) {
-      return res.status(401).json({ error: "Invalid email or password." });
+    const authenticated = await bcrypt.compare(password, student.password);
+
+    if (authenticated) {
+      const token = jwt.sign(
+        {
+          id: student._id,
+          email: student.email,
+          role: "student",
+        },
+        config.jwtsecret,
+        { expiresIn: "24h" }
+      );
+
+      // Convert Mongoose document to a plain JavaScript object
+      const authorized = student.toObject();
+
+      // Remove sensitive data
+      delete authorized.password;
+
+      res.header("Authorization", `Bearer ${token}`).json(authorized);
+    } else {
+      res.status(401).json({ error: "Invalid credentials" });
     }
-
-    // Generate JWT token
-    const token = jwt.sign(
-      { id: student._id, email: student.email, role: "student" },
-      config.jwtsecret,
-      { expiresIn: "24h" }
-    );
-
-    res
-      .header("Authorization", `Bearer ${token}`)
-      .json({ message: "Login successful", token });
   } catch (error) {
     res.status(500).json({ error: `Internal server error: ${error.message}` });
   }
