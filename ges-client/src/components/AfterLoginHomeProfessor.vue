@@ -1,4 +1,10 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue'
+
+const searchTerm = ref('')
+const professorId = ref(localStorage.getItem("professorId"));
+
+</script>
 
 <template>
   <div class="wrapper">
@@ -6,19 +12,32 @@
       <img src="/logo.png" alt="Golden Eagle Logo" class="logo" />
       <div class="auth-links">
         <RouterLink
-        class="login-link"
-        :to="`/profile/professor/${professorId}`"
-      >
-    View Your Professor Profile</RouterLink
+          class="profile-link"
+          :to="`/profile/professor/${professorId}`"
         >
+          View Your Professor Profile
+        </RouterLink>
       </div>
+      <div class="view-links">
+      <RouterLink class="view-link" to="/professorsAll">View All Professors</RouterLink>
+      <RouterLink class="view-link" to="/coursesAll">View All Courses</RouterLink>
+      <RouterLink class="view-link" to="/reviews">View All Reviews</RouterLink>
+      <RouterLink class="view-link" to="/reviews/add">Submit A Review</RouterLink>
+    </div>
     </header>
     <div class="search-bar">
       <input
+        v-model="searchTerm"
         type="text"
         placeholder="Search professors, courses, and more..."
       />
-      <button>Search</button>
+      <RouterLink
+        :to="{ name: 'SearchResults', query: { query: searchTerm.trim() } }"
+        v-if="searchTerm.trim().length > 0"
+      >
+        <button>Search</button>
+      </RouterLink>
+      <button v-else disabled>Search</button>
     </div>
     <p class="welcome-text">
       Welcome to Golden Eagle Search, home to all the information you need about
@@ -62,6 +81,7 @@ html {
   width: 350px;
   height: auto;
   margin-bottom: 10px;
+  margin-top: 80px;
 }
 
 .auth-links {
@@ -69,6 +89,13 @@ html {
   gap: 20px;
   margin-bottom: 20px;
   justify-content: center;
+}
+
+.link-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
 .login-link,
@@ -85,6 +112,7 @@ html {
   color: #FFF68F;
   text-decoration-color: #FFF68F;
 }
+
 .search-bar {
   display: flex;
   justify-content: center;
@@ -119,5 +147,19 @@ html {
 
 .welcome-text {
   font-size: 1.5em;
+}
+.profile-link,
+.register-link {
+  color: white;
+  font-size: 1.5rem;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.3s ease, text-decoration-color 0.3s ease;
+}
+
+.profile-link:hover,
+.register-link:hover {
+  color: #FFF68F;
+  text-decoration-color: #FFF68F;
 }
 </style>
