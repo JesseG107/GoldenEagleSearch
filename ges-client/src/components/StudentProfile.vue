@@ -3,6 +3,9 @@
     <img src="/logo.png" alt="Golden Eagle Logo" class="logo" />
     <div class="auth-links">
       <RouterLink class="login-link" to="/afterloginhomestudent">Home</RouterLink>
+      <RouterLink class="login-link" to="/home">Log-Out</RouterLink>
+
+
     </div>
   </header>
   <div class="student-profile">

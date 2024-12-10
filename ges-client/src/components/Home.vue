@@ -1,39 +1,49 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue'
+
+const searchTerm = ref('')
+</script>
+
 <template>
   <div class="wrapper">
     <header>
       <img src="/logo.png" alt="Golden Eagle Logo" class="logo" />
-      <div class="auth-links">
-        <RouterLink class="login-link" to="/students/login"
-          >Student Login</RouterLink
-        >
-        <RouterLink class="login-link" to="/register/student"
-          >Student Sign-Up</RouterLink
-        >
-        <RouterLink class="login-link" to="/professors/login"
-          >Professor Login</RouterLink
-        >
-        <RouterLink class="login-link" to="/register/professor"
-          >Professor Sign-Up</RouterLink
-        >
 
+      <div class="auth-links">
+        <RouterLink class="login-link" to="/students/login">Student Login</RouterLink>
+        <RouterLink class="login-link" to="/register/student">Student Sign-Up</RouterLink>
+        <RouterLink class="login-link" to="/professors/login">Professor Login</RouterLink>
+        <RouterLink class="login-link" to="/register/professor">Professor Sign-Up</RouterLink>
       </div>
-    </header>
-    <div class="search-bar">
-      <input
-        type="text"
-        placeholder="Search professors, courses, and more..."
-      />
-      <button>Search</button>
-    </div>
-    <p class="welcome-text">
+      <p class="welcome-text">
       Welcome to Golden Eagle Search, home to all the information you need about
       CSULA's professors and courses.
     </p>
     <p class="welcome-text">
       To start exploring, simply search a professor or course in the search bar
-      above.
+      below.
     </p>
+    </header>
+    <div class="search-bar">
+      <input
+        v-model="searchTerm"
+        type="text"
+        placeholder="Search professors, courses, and more..."
+      />
+      <RouterLink
+        :to="{ name: 'SearchResults', query: { query: searchTerm.trim() } }"
+        v-if="searchTerm.trim().length > 0"
+      >
+        <button>Search</button>
+      </RouterLink>
+      <button v-else disabled>Search</button>
+    </div>
+    <div class="view-links">
+      <RouterLink class="view-link" to="/professorsAll">View All Professors</RouterLink>
+      <RouterLink class="view-link" to="/coursesAll">View All Courses</RouterLink>
+      <RouterLink class="view-link" to="/reviews">View All Reviews</RouterLink>
+      <RouterLink class="view-link" to="/reviews/add">Submit A Review</RouterLink>
+    </div>
   </div>
 </template>
 
@@ -59,15 +69,13 @@ html {
   color: #f8f8ff;
   padding: 20px;
   text-align: center;
-  box-shadow: none;
-  outline: none;
-  margin-top: -100px;
 }
 
 .logo {
   width: 350px;
   height: auto;
   margin-bottom: 10px;
+  margin-top: 80px;
 }
 
 .auth-links {
@@ -79,7 +87,7 @@ html {
 
 .login-link,
 .register-link {
-  color: #FFD700;
+  color: #ffd700;
   font-size: 1.5rem;
   text-decoration: underline;
   cursor: pointer;
@@ -88,8 +96,8 @@ html {
 
 .login-link:hover,
 .register-link:hover {
-  color: #FFF68F;
-  text-decoration-color: #FFF68F;
+  color: #fff68f;
+  text-decoration-color: #fff68f;
 }
 
 .search-bar {
@@ -97,7 +105,6 @@ html {
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
-  margin-left: 50px;
 }
 
 .search-bar input {
@@ -113,7 +120,7 @@ html {
   padding: 8px 30px;
   font-size: 1.2em;
   color: black;
-  background-color: #FFF68F;
+  background-color: #fff68f;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -121,7 +128,42 @@ html {
 }
 
 .search-bar button:hover {
-background-color: #FFD700;
+  background-color: #ffd700;
+}
+
+.view-links {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 20px;
+}
+
+.view-link {
+  font-size: 1.3rem;
+  color: #ffd700;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.view-link:hover {
+  color: white;
+}
+
+
+.review-links {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 20px;
+}
+
+.review-link {
+  font-size: 1.3rem;
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.review-link:hover {
+  color: #fff68f;
 }
 
 .welcome-text {

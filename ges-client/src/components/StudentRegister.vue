@@ -4,7 +4,6 @@
       <h1>Golden Eagle Search</h1>
       <h2>Student Registration</h2>
       <RouterLink class="login-link" to="/home">Home</RouterLink>
-
     </div>
     <div>
       <form class="two-column-form" @submit.prevent="registerStudent">
@@ -74,7 +73,7 @@ export default {
       try {
         await axios.post("http://localhost:8080/students/register", this.form);
         alert("Student registration successful!");
-        this.$router.push("/login");
+        this.$router.push("/students/login");
       } catch (error) {
         this.errorMessage =
           error.response?.data?.error || "Registration failed.";

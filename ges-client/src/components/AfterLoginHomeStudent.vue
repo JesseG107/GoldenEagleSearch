@@ -1,31 +1,40 @@
 <script setup>
 import { ref } from "vue";
-
-// Retrieve the MongoDB ObjectId for the student from localStorage
+const searchTerm = ref('')
 const studentId = ref(localStorage.getItem("studentId"));
 </script>
-
 
 <template>
   <div class="wrapper">
     <header>
       <img src="/logo.png" alt="Golden Eagle Logo" class="logo" />
       <div class="auth-links">
-      <RouterLink
-        class="login-link"
-        :to="`/profile/student/${studentId}`"
-      >
-        View Your Student Profile
-      </RouterLink>
+        <RouterLink class="profile-link" :to="`/profile/student/${studentId}`">
+          View Your Student Profile
+        </RouterLink>
+      </div>
+      <div class="view-links">
+      <RouterLink class="view-link" to="/professorsAll">View All Professors</RouterLink>
+      <RouterLink class="view-link" to="/coursesAll">View All Courses</RouterLink>
+      <RouterLink class="view-link" to="/reviews">View All Reviews</RouterLink>
+      <RouterLink class="view-link" to="/reviews/add">Submit A Review</RouterLink>
     </div>
     </header>
     <div class="search-bar">
       <input
+        v-model="searchTerm"
         type="text"
         placeholder="Search professors, courses, and more..."
       />
-      <button>Search</button>
+      <RouterLink
+        :to="{ name: 'SearchResults', query: { query: searchTerm.trim() } }"
+        v-if="searchTerm.trim().length > 0"
+      >
+        <button>Search</button>
+      </RouterLink>
+      <button v-else disabled>Search</button>
     </div>
+
     <p class="welcome-text">
       Welcome to Golden Eagle Search, home to all the information you need about
       CSULA's professors and courses.
@@ -68,6 +77,7 @@ html {
   width: 350px;
   height: auto;
   margin-bottom: 10px;
+  margin-top: 80px;
 }
 
 .auth-links {
@@ -77,16 +87,42 @@ html {
   justify-content: center;
 }
 
-.login-link,
+
+.view-links {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 20px;
+}
+
+.view-link {
+  font-size: 1.3rem;
+  color: #ffd700;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.view-link:hover {
+  color: white;
+}
+
+.link-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+
+.profile-link,
 .register-link {
-  color: #FFD700;
+  color: white;
   font-size: 1.5rem;
   text-decoration: underline;
   cursor: pointer;
   transition: color 0.3s ease, text-decoration-color 0.3s ease;
 }
 
-.login-link:hover,
+.profile-link:hover,
 .register-link:hover {
   color: #FFF68F;
   text-decoration-color: #FFF68F;
@@ -127,6 +163,4 @@ html {
 .welcome-text {
   font-size: 1.5em;
 }
-
-
 </style>

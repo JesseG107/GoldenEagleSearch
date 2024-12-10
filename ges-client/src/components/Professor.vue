@@ -1,27 +1,23 @@
 <template>
-    <div class="course-detail-page">
-      <h2>{{ course.name }}</h2>
+    <div class="professor-detail-page">
+      <h2>{{ professor.name }}</h2>
       <RouterLink class="home-link" to="/home">Return Home</RouterLink>
   
       <div v-if="loading" class="loading">Loading...</div>
       <div v-else-if="error" class="error">{{ error }}</div>
       <div v-else>
-        <div class="course-card">
-          <p><strong>Department:</strong> {{ course.department }}</p>
-          <p><strong>Description:</strong> {{ course.description }}</p>
-          <p><strong>Prerequisites:</strong> 
-            {{ (course.prerequisites && course.prerequisites.length)
-               ? course.prerequisites.join(", ")
-               : "None" }}
-          </p>
-          <p><strong>Capacity:</strong> {{ course.capacity }}</p>
+        <div class="professor-card">
+          <p><strong>Email:</strong> {{ professor.email }}</p>
+          <p><strong>Degree:</strong> {{ professor.degree }}</p>
+          <p><strong>Department:</strong> {{ professor.department }}</p>
+          <p v-if="professor.bio"><strong>Bio:</strong> {{ professor.bio }}</p>
           
-          <div v-if="course.professors && course.professors.length">
-            <strong>Professors:</strong>
+          <div v-if="professor.coursesTaught && professor.coursesTaught.length">
+            <strong>Courses Taught:</strong>
             <ul>
-              <li v-for="professor in course.professors" :key="professor._id">
-                <RouterLink :to="{ name: 'Professor', params: { id: professor._id } }">
-                    {{ professor.name }} ({{ professor.degree }})
+              <li v-for="course in professor.coursesTaught" :key="course._id">
+                <RouterLink :to="{ name: 'Course', params: { id: course._id } }">
+                    {{ course.name }}
                 </RouterLink>
               </li>
             </ul>
@@ -39,29 +35,29 @@
   export default {
     setup() {
       const route = useRoute()
-      const course = ref(null)
+      const professor = ref(null)
       const loading = ref(true)
       const error = ref(null)
   
       onMounted(async () => {
         try {
           const { id } = route.params
-          const response = await axios.get(`http://localhost:8080/courses/${id}`)
-          course.value = response.data
+          const response = await axios.get(`http://localhost:8080/professors/${id}`)
+          professor.value = response.data
         } catch (err) {
-          error.value = 'Error fetching course details'
+          error.value = 'Error fetching professor details'
         } finally {
           loading.value = false
         }
       })
   
-      return { course, loading, error }
+      return { professor, loading, error }
     }
   }
   </script>
   
   <style scoped>
-  .course-detail-page {
+  .professor-detail-page {
     max-width: 600px;
     margin: 40px auto;
     background-color: #f9f9f9;
@@ -69,7 +65,7 @@
     border-radius: 8px;
   }
   
-  .course-card {
+  .professor-card {
     background: #fff;
     padding: 15px;
     border-radius: 6px;
@@ -93,6 +89,10 @@
     text-align: center;
     font-size: 1.2em;
     margin-top: 20px;
+  }
+  
+  .strong {
+    font-weight: bold;
   }
   
   ul {

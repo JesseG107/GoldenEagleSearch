@@ -9,35 +9,28 @@ import About from "../components/About.vue";
 // From Older Merged
 import Search from "../components/Search.vue";
 
-// Student and Professors Registrations
+// Testing pages
 import StudentRegister from "../components/StudentRegister.vue";
 import ProfessorRegister from "../components/ProfessorRegister.vue";
-
-// Student and Professer Profiles
 import StudentProfile from "../components/StudentProfile.vue";
 import ProfessorProfile from "../components/ProfessorProfile.vue";
-
-// Student and Professor Logins
 import StudentLogin from "../components/StudentLogin.vue";
 import ProfessorLogin from "../components/ProfessorLogin.vue";
 import AfterLoginHomeProfessor from "../components/AfterLoginHomeProfessor.vue";
 import AfterLoginHomeStudent from "../components/AfterLoginHomeStudent.vue";
-
+import ProfessorsAll from "../components/Professors.vue";
+import CoursesAll from "../components/Courses.vue";
+import Professor from "../components/Professor.vue";
+import Course from "../components/Course.vue";
 //Review Pages
 import ReviewForm from "../components/ReviewForm.vue";
 import ReviewList from "../components/ReviewList.vue";
-
-//Course Page
-import Courses from "../components/Courses.vue";
-
-// Professors Page
-import Professors from "../components/Professors.vue";
 
 const routes = [
   { path: "/", component: Home },
   { path: "/about", component: About },
   { path: "/home", component: Home },
-  { path: "/search", component: Search },
+  { path: "/search", name: "SearchResults", component: Search },
   { path: "/register/student", component: StudentRegister },
   { path: "/register/professor", component: ProfessorRegister },
   { path: "/profile/student/:id", component: StudentProfile },
@@ -48,8 +41,11 @@ const routes = [
   { path: "/afterloginhomeprofessor", component: AfterLoginHomeProfessor },
   { path: "/reviews/add", component: ReviewForm }, // Add a review
   { path: "/reviews", component: ReviewList },
-  { path: "/courses", component: Courses },
-  { path: "/professors", component: Professors },
+  { path: "/professorsAll", component: ProfessorsAll },
+  { path: "/coursesAll", component: CoursesAll },
+  { path: "/professor/:id", name: "Professor", component: Professor },
+  { path: "/course/:id", name: "Course", component: Course },
+  {}
 ];
 
 const router = createRouter({
