@@ -1,31 +1,22 @@
 const Course = require("./course.model");
+const Professor = require("../professors/professor.model");
 
 // Get all courses with optional populated professors and reviews
 const getAllCourses = async (req, res) => {
-  const { query } = req;
-
-  const includeProfessors = query.includeProfessors === "true";
-  const includeReviews = query.includeReviews === "true";
-
   try {
-    let queryBuilder = Course.find();
-
-    if (includeProfessors) {
-      queryBuilder = queryBuilder.populate(
-        "professors",
-        "name email department"
-      );
-    }
-
-    if (includeReviews) {
-      queryBuilder = queryBuilder.populate("reviews", "reviewText student_id");
-    }
-
-    const courses = await queryBuilder;
-    res.json(courses);
+    // Fetch all courses
+    const courses = await Course.find().populate(
+      "professors",
+      "name email degree department"
+    );
+    res.status(200).json(courses);
   } catch (error) {
     res.status(500).json({ error: `Internal server error: ${error.message}` });
   }
+};
+
+module.exports = {
+  getAllCourses,
 };
 
 // Get a specific course by ID with optional populated professors and reviews
@@ -75,23 +66,32 @@ const createCourse = async (req, res) => {
   const { name, description, department, prerequisites, capacity, professors } =
     req.body;
 
-  if (!name || !department || !capacity) {
-    return res.status(400).json({
-      error: 'Fields "name", "department", and "capacity" are required',
-    });
-  }
-
   try {
+    // Create the course
     const newCourse = new Course({
       name,
       description,
       department,
-      prerequisites: prerequisites || [],
+      prerequisites,
       capacity,
-      professors: professors || [],
+      professors,
     });
 
     const savedCourse = await newCourse.save();
+
+    // Update each professor's coursesTaught array
+    if (professors && professors.length > 0) {
+      await Promise.all(
+        professors.map(async (professorId) => {
+          await Professor.findByIdAndUpdate(
+            professorId,
+            { $push: { coursesTaught: savedCourse._id } },
+            { new: true }
+          );
+        })
+      );
+    }
+
     res.status(201).json(savedCourse);
   } catch (error) {
     res.status(500).json({ error: `Internal server error: ${error.message}` });
